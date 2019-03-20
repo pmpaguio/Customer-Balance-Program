@@ -11,7 +11,7 @@ struct PERSON {
 	float Balance;
 };
 
-void Display(PERSON* &a, int N)
+void Display(PERSON a[], int N)
 {
 	cout << "\tName\t\tBalance" << endl;
 	cout << "\t--------------------------" << endl;
@@ -22,7 +22,7 @@ void Display(PERSON* &a, int N)
 	}
 }
 
-void FindRichest(PERSON* &a, int N)
+void FindRichest(PERSON a[], int N)
 {
 	cout << endl;
 	// for loop
@@ -40,7 +40,7 @@ void FindRichest(PERSON* &a, int N)
 	cout << endl;
 }
 
-void Deposit(string CustName, PERSON* &a, int N)
+void Deposit(string CustName, PERSON a[], int N)
 {
 	float deposit;
 	cout << CustName << ", how much would you like to deposit? ";
@@ -53,19 +53,20 @@ void Deposit(string CustName, PERSON* &a, int N)
 			a[i].Balance += deposit;
 			cout << "Now your new balance is " << a[i].Balance << endl;
 			break;
-		}		
+		}
 	}
 }
 
-void NewCopy(string fileName, PERSON* &a, int N)
+void NewCopy(string fileName, PERSON a[], int N)
 {
 	ofstream theFile;
-	theFile.open(fileName);
+	theFile.open(fileName.c_str());
 	cout << fixed << setprecision(2);
 	for (int i = 0; i < N; i++)
 	{
 		theFile << a[i].Name << " " << a[i].Balance << endl;
 	}
+
 	theFile.close();
 }
 
@@ -80,14 +81,14 @@ int main()
 	while (theFile)
 	{
 		if (getline(theFile, inLine))
-		{ 
+		{
 			N++;
 		}
 	}
 	theFile.close();
 
-	// Define array of person 
-	PERSON* P = new PERSON[N];
+	// Define array of person
+	PERSON P[N];
 
 	//Populate array of PERSONS
 	string fname, lname;
@@ -100,11 +101,11 @@ int main()
 		theFile >> fname >> lname;
 		theFile >> money;
 		pname = fname + " " + lname;
-		strcpy_s(P[ix].Name, pname.c_str());
+		strcpy(P[ix].Name, pname.c_str());
 		P[ix].Balance = money;
 		ix++;
 	}
-	
+
 	Display(P, N);
 	FindRichest(P, N);
 
@@ -112,9 +113,8 @@ int main()
 	cout << "Enter your full name to deposit money: ";
 	getline(cin, ename);
 	Deposit(ename, P, N);
-	
+
 	NewCopy("data.txt", P, N);
 
-	system("pause");
 	return 0;
 }
